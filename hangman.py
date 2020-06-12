@@ -37,13 +37,22 @@ HANGMAN_PICS = ['''
     ===''']
 #All caps = constant variable, should not be changed later on.
 
-words = 'ant baboon badger bat bear beaver camel cat clam cobra cougar coyote crow deer dog donkey duck eagle mourse mule newt otter owl panda parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep skunk sloth snake spider stork swan tiger toad trout turkey turtle weasel whale wolf wombat zebra'.split()
+words = {"Animals":'ant baboon badger bat bear beaver camel cat clam cobra cougar coyote crow deer dog donkey duck eagle mouse mule newt otter owl panda parrot pigeon python rabbit ram rat raven rhino salmon seal shark sheep skunk sloth snake spider stork swan tiger toad trout turkey turtle weasel whale wolf wombat zebra'.split(),
+"Shapes": "square triangle rectangle circle ellipse rhombus trapazoid chevron pentagon hexagon septagon octagon".split(),
+"Fruits": "apple orange lemon lime pear watermelong grape grapefruit cherry banana cantaloupe mango strawberry tomato".split(),
+"Colors": "red orange yellow green blue indigo violet white black brown".split()}
+
 #The .split() method will place each word in a single list. Words seperated by spaces will be placed in their own index.
 
-def getRandomWordList(wordList):
+def getRandomWord(wordDict):
     #picks a random word from the words list
-    rIndex = random.randint(0, len(wordList) - 1)
-    return wordList[rIndex]
+
+    #randomly select a key from the dictionary
+    wordKey = random.choice(list(wordDict.keys()))
+
+    #randomly selects a word from the keys list in the dictionary
+    wordIndex = random.randint(0, len(wordDict) - 1)
+    return [wordDict[wordKey][wordIndex], wordKey] #ex: ["lime", "Fruits"] The key in index 1 is used later on to give the player a subject to guess.
 
 def displayBoard(missedLetters, correctLetters, secretWord):
     print(HANGMAN_PICS[len(missedLetters)])
@@ -82,14 +91,17 @@ def playAgain():
     print("Do you want to play again? (yes or no)")
     return input().lower().startswith('y')
 
-print("H A N G M A N")
+
+
+print("-H A N G M A N-")
 missedLetters = ""
 correctLetters = ""
-secretWord = getRandomWordList(words)
+secretWord, secretSet = getRandomWord(words)
 gameIsDone = False
 
 while True: 
     #Display the board
+    print("\nThe secret word is in set: " + secretSet)
     displayBoard(missedLetters, correctLetters, secretWord)
 
     #Allows the player to make a guess.
@@ -120,7 +132,7 @@ while True:
             missedLetters = ""
             correctLetters = ""
             gameIsDone = False
-            secretWord = getRandomWordList(words)
+            secretWord, secretSet= getRandomWord(words)
         else:
             break #ends game
 
